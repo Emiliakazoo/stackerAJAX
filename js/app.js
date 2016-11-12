@@ -1,3 +1,15 @@
+
+//UTILITIES
+//for decoding special characters
+function htmlDecode(value){
+  return $('<div/>').html(value).text();
+}
+//for capitalizing first letter of string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+//END UTILITIES
+
 // this function takes the question object returned by the StackOverflow request
 // and returns new result to be appended to DOM
 var showQuestion = function(question) {
@@ -27,6 +39,39 @@ var showQuestion = function(question) {
 		'</a></p>' +
 		'<p>Reputation: ' + question.owner.reputation + '</p>'
 	);
+
+	return result;
+};
+
+
+// this function takes the answerers object returned by the StackOverflow request for top answerers
+// and returns new result to be appended to DOM
+var showTopAnswerers = function(answerers) {
+	
+	// clone our result template code
+	var result = $('.templates .topAnswerers').clone();
+	
+	// Set the answerer properties in result
+	var answererElem = result.find('.answerer-link');
+	answererElem.attr('href', answerers.user.link);
+	answererElem.text(htmlDecode(answerers.user.display_name));
+
+	var answererPic = result.find('.answerer-image img');
+	answererPic.parent().attr('href', answerers.user.link);
+	answererPic.attr({src: answerers.user.profile_image, alt: answerers.user.display_name, title: answerers.user.display_name});
+
+	// set the answerer's score property in result
+	var score = result.find('.answerer-score');
+	score.text(answerers.score);
+
+	//number of posts
+	var postCount = result.find('.answerer-posts');
+	postCount.text(answerers.post_count);
+
+	//type of user -- registered, moderator or ?
+	var answererType = result.find('.answerer-type');
+	answererType.text(capitalizeFirstLetter(answerers.user.user_type) + ' user');
+
 
 	return result;
 };
@@ -82,6 +127,32 @@ var getUnanswered = function(tags) {
 };
 
 
+var getTopAnswerers = function(tags){
+	var request = {
+		tagged: tags
+	}
+
+	$.ajax({
+		url: "http://api.stackexchange.com/2.2/tags/" + tags + "/top-answerers/all_time?site=stackoverflow",
+		data:request,
+		dataType:"jsonp",
+		type: "GET"
+	}).done(function(result){
+		var searchResults = showSearchResults(request.tagged, result.items.length);
+		$('.search-results').html(searchResults);
+
+		$.each(result.items, function(i, item) {
+			var answerersResult = showTopAnswerers(item);
+			$('.results').append(answerersResult);
+		});
+
+	}).fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
+		var errorElem = showError(error);
+		$('.search-results').append(errorElem);
+	});
+
+};
+
 $(document).ready( function() {
 	$('.unanswered-getter').submit( function(e){
 		e.preventDefault();
@@ -90,5 +161,14 @@ $(document).ready( function() {
 		// get the value of the tags the user submitted
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
+	});
+
+	$('.inspiration-getter').submit( function(e){
+		e.preventDefault();
+		console.log("I got this far");
+		 $('.results').html('');
+		 var topHelpers = $(this).find("input[name='answerers']").val();
+		 getTopAnswerers(topHelpers);
+
 	});
 });
