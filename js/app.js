@@ -128,11 +128,6 @@ var getUnanswered = function(tags) {
 
 
 var getTopAnswerers = function(tags){
-	
-	// $.getJSON('http://api.stackexchange.com/2.2/tags/' + tags + '/top-answerers/all_time?site=stackoverflow', function(data){
-	// 	console.log(tags);
-	// 	console.log(data);
-	// });
 	var request = {
 		tagged: tags
 	}
@@ -151,15 +146,6 @@ var getTopAnswerers = function(tags){
 			$('.results').append(answerersResult);
 		});
 
-
-		//console.log(tags);
-		// var x;
-		// for (var i = 0; i < result.items.length; i++){
-		// 	x = result.items[i].user.display_name + ", reputation " + result.items[i].user.reputation + ", score " + result.items[i].score + ", link to profile " + result.items[i].user.link + ", user image " + result.items[i].user.profile_image;
-		// 	console.log(x);
-		// }
-		//console.log(result.items);
-		//console.log(searchResults);
 	}).fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
 		var errorElem = showError(error);
 		$('.search-results').append(errorElem);
@@ -176,6 +162,7 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+
 	$('.inspiration-getter').submit( function(e){
 		e.preventDefault();
 		console.log("I got this far");
