@@ -3,6 +3,22 @@
 	width: 600px;
 }
 
+.result.topAnswerers {
+	list-style-type:none;
+	margin:10px 0 15px;
+	padding:10px;
+	display:flex;
+	justify-content:space-between;
+	position:relative;
+	width:75%;
+	border: 1px solid #ccc;
+    background-color: #f2f2f2;}
+
+.topAnswerers li {
+	display:flex;
+	flex-direction:column;
+}
+
 .hidden {
 	display: none;
 }
@@ -44,4 +60,34 @@
 .error {
 	background-color: #F78181;
 	padding: 1em;
+}
+/* extra styles */
+.answerer-link {
+	margin-bottom:10px;
+	margin-left:10px;
+}
+
+.answerer-posts {
+	margin 5px 0;
+}
+
+.answerer-score {
+	margin-top:5px;
+}
+
+.answerer-image {
+	display:block;
+	width:75px;
+}
+.answerer-image img {
+	width:100%;
+	padding:5px;
+	border:1px solid #ccc;
+	box-shadow:1px 2px 3px 1px #ccc;
+	background-color:#fff;
+}
+
+.answerer-type{
+	position:absolute;
+	bottom:10px;
 }
