@@ -133,11 +133,8 @@ var getTopAnswerers = function(tags){
 	}
 
 	$.ajax({
-<<<<<<< HEAD
 		url: "http://api.stackexchange.com/2.2/tags/" + tags + "/top-answerers/all_time?site=stackoverflow",
-=======
 		url: "https://api.stackexchange.com/2.2/tags/" + tags + "/top-answerers/all_time?site=stackoverflow",
->>>>>>> gh-pages
 		data:request,
 		dataType:"jsonp",
 		type: "GET"
